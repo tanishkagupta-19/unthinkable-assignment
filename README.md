@@ -1,18 +1,18 @@
 # Healthcare Appointment & Follow-up Manager
 
-Backend for a healthcare appointment platform — patients book appointments, doctors get AI-generated symptom summaries before visits, and everyone gets email/calendar notifications.
+Backend for a healthcare appointment platform — patients book appointments,doctors get AI-generated symptom summaries before visits,and everyone gets email/calendar notifications.
 
 Built with FastAPI + PostgreSQL.
 
 ## What It Does
 
-**Patients** can search doctors by specialisation, pick a time slot, fill a symptom form, and book. They get an AI summary of their visit afterwards in plain language. They can also cancel or reschedule.
+**Patients** can search doctors by specialisation,pick a time slot,fill a symptom form,and book. They get an AI summary of their visit afterwards in plain language. They can also cancel or reschedule.
 
-**Doctors** see their upcoming appointments with an AI-generated pre-visit brief (urgency level, chief complaint, suggested questions). After the visit they submit notes and a prescription — the system converts their clinical notes into something the patient can actually understand.
+**Doctors** see their upcoming appointments with an AI-generated pre-visit brief(urgency level,chief complaint,suggested questions). After the visit they submit notes and a prescription — the system converts their clinical notes into something the patient can actually understand.
 
-**Admins** manage doctor profiles, mark leave days (which auto-cancels affected appointments and notifies patients), and have an overview of all appointments.
+**Admins** manage doctor profiles,mark leave days(which auto-cancels affected appointments and notifies patients),and have an overview of all appointments.
 
-Other stuff: double-booking prevention with row locking + unique constraints, a 5-minute slot hold while the patient fills their symptom form, email retry queue, Google Calendar sync.
+Other stuff:double-booking prevention with row locking + unique constraints,a 5-minute slot hold while the patient fills their symptom form,email retry queue,Google Calendar sync.
 
 ## Tech Stack
 
@@ -21,15 +21,15 @@ Other stuff: double-booking prevention with row locking + unique constraints, a 
 | Backend | FastAPI 0.115 |
 | Database | PostgreSQL + SQLAlchemy 2.0 |
 | Migrations | Alembic |
-| Auth | JWT (python-jose) + bcrypt |
-| LLM | OpenAI API (gpt-3.5-turbo) |
+| Auth | JWT(python-jose)+ bcrypt |
+| LLM | OpenAI API(gpt-3.5-turbo)|
 | Email | SendGrid |
 | Calendar | Google Calendar API |
 | Background Jobs | APScheduler |
 
 ## Setup
 
-**Prerequisites:** Python 3.11+, PostgreSQL 14+
+**Prerequisites:** Python 3.11+,PostgreSQL 14+
 
 ```bash
 git clone https://github.com/your-username/unthinkable-assignment.git
@@ -44,7 +44,7 @@ pip install -r requirements.txt
 
 Create the database:
 ```bash
-psql -U postgres -c "CREATE DATABASE healthcare_db;"
+psql -U postgres -c"CREATE DATABASE healthcare_db;"
 ```
 
 Copy `.env.example` to `.env` and fill in your values:
@@ -59,9 +59,9 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 Swagger docs at `http://localhost:8000/docs`.
 
-Tables are auto-created on startup. For production, use Alembic:
+Tables are auto-created on startup. For production,use Alembic:
 ```bash
-alembic revision --autogenerate -m "initial tables"
+alembic revision --autogenerate -m"initial tables"
 alembic upgrade head
 ```
 
@@ -70,7 +70,7 @@ alembic upgrade head
 ### Auth
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/auth/register` | Register (patient/doctor) |
+| POST | `/api/auth/register` | Register(patient/doctor)|
 | POST | `/api/auth/login` | Get JWT token |
 | GET | `/api/auth/me` | Current user profile |
 | GET | `/api/auth/google/connect` | Start Google OAuth |
@@ -81,7 +81,7 @@ alembic upgrade head
 |--------|----------|-------------|
 | GET | `/api/patients/doctors?specialisation=cardiology` | Search doctors |
 | GET | `/api/patients/doctors/{id}/slots?appointment_date=2025-01-20` | Available slots |
-| POST | `/api/patients/appointments/hold` | Hold a slot (5 min) |
+| POST | `/api/patients/appointments/hold` | Hold a slot(5 min)|
 | POST | `/api/patients/appointments/book` | Confirm booking |
 | GET | `/api/patients/appointments` | My appointments |
 | GET | `/api/patients/appointments/{id}` | Appointment detail |
@@ -115,7 +115,7 @@ alembic upgrade head
 
 ## Google Calendar
 
-You need a Google Cloud project with Calendar API enabled and an OAuth 2.0 client ID (Web application type). Set the redirect URI to `http://localhost:8000/api/auth/google/callback`.
+You need a Google Cloud project with Calendar API enabled and an OAuth 2.0 client ID(Web application type). Set the redirect URI to `http://localhost:8000/api/auth/google/callback`.
 
-Users connect via `GET /api/auth/google/connect` — after that, calendar events are created automatically on booking.
+Users connect via `GET /api/auth/google/connect` — after that,calendar events are created automatically on booking.
 
