@@ -119,6 +119,3 @@ You need a Google Cloud project with Calendar API enabled and an OAuth 2.0 clien
 
 Users connect via `GET /api/auth/google/connect` — after that, calendar events are created automatically on booking.
 
-## License
-
-Built as part of an assignment submission.
