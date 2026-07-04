@@ -146,7 +146,7 @@ def hold_slot(db:Session,doctor_id:int,appointment_date:date,
 
 def book_appointment(db:Session,hold_id:int,symptoms_text:str,
                       patient_id:int)-> Appointment:
-"""Confirm booking from a held slot. Uses SELECT FOR UPDATE to prevent races."""
+    """Confirm booking from a held slot. Uses SELECT FOR UPDATE to prevent races."""
     hold=db.query(SlotHold).filter(SlotHold.id==hold_id).first()
     if not hold:
         raise ValueError("Hold not found or expired,try again")

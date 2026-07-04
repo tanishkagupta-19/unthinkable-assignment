@@ -98,7 +98,7 @@ def check_and_send_medication_reminders(db:Session):
 
 
 def check_and_send_appointment_reminders(db:Session):
-"""Send reminders for appointments ~24h from now."""
+    """Send reminders for appointments ~24h from now."""
     now=datetime.utcnow()
     tomorrow_start=now + timedelta(hours=23)
     tomorrow_end=now + timedelta(hours=25)

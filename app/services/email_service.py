@@ -12,7 +12,7 @@ logger=logging.getLogger(__name__)
 
 
 def send_email(db:Session,to_email:str,subject:str,html_body:str)-> bool:
-"""Send via SendGrid and log the attempt. Returns True on success."""
+    """Send via SendGrid and log the attempt. Returns True on success."""
     email_log=EmailLog(
         recipient_email=to_email,
         subject=subject,
@@ -66,7 +66,7 @@ def send_email(db:Session,to_email:str,subject:str,html_body:str)-> bool:
 
 
 def retry_failed_emails(db:Session):
-"""Retry emails with status='failed' and retry_count < max_retries."""
+    """Retry emails with status='failed' and retry_count < max_retries."""
     failed_emails=(
         db.query(EmailLog)
         .filter(
@@ -123,7 +123,7 @@ def send_booking_confirmation(db:Session,patient_email:str,doctor_email:str,
     </ul>
     <p>Please arrive 10 minutes early. You can cancel or reschedule
     from your dashboard.</p>
-"""
+    """
     send_email(db,patient_email,"Appointment Confirmed",patient_html)
 
     doctor_html=f"""
@@ -136,7 +136,7 @@ def send_booking_confirmation(db:Session,patient_email:str,doctor_email:str,
         <li><strong>Time:</strong> {time_str}</li>
     </ul>
     <p>The patient's symptom summary will be available before the visit.</p>
-"""
+    """
     send_email(db,doctor_email,f"New Appointment:{patient_name}",doctor_html)
 
 
@@ -152,7 +152,7 @@ def send_cancellation_notice(db:Session,email:str,name:str,
     </ul>
     {"<p><strong>Reason:</strong>"+ reason +"</p>"if reason else""}
     <p>Please book a new appointment if needed.</p>
-"""
+    """
     send_email(db,email,"Appointment Cancelled",html)
 
 
@@ -167,7 +167,7 @@ def send_appointment_reminder(db:Session,email:str,name:str,
         <li><strong>Date:</strong> {date_str}</li>
         <li><strong>Time:</strong> {time_str}</li>
     </ul>
-"""
+    """
     send_email(db,email,"Appointment Tomorrow",html)
 
 
@@ -182,5 +182,5 @@ def send_medication_reminder_email(db:Session,email:str,patient_name:str,
         <li><strong>Dosage:</strong> {dosage}</li>
     </ul>
     <p>Stay consistent with your medication for the best results.</p>
-"""
+    """
     send_email(db,email,f"Medication Reminder:{medication_name}",html)

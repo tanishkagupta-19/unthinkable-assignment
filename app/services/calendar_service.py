@@ -38,7 +38,7 @@ def create_calendar_event(
     end_datetime:datetime,
     db:Session,
 )-> str | None:
-"""Create a Google Calendar event. Returns event ID or None."""
+    """Create a Google Calendar event. Returns event ID or None."""
     service=_get_calendar_service(user)
     if not service:
         logger.info(f"User {user.id} hasn't connected Google Calendar,skipping")
@@ -144,7 +144,7 @@ def delete_calendar_event(user:User,event_id:str,db:Session)-> bool:
 
 
 def _update_tokens_if_refreshed(user:User,service,db:Session):
-"""Save refreshed access token back to DB if it changed."""
+    """Save refreshed access token back to DB if it changed."""
     try:
         creds=service._http.credentials
         if hasattr(creds,"token")and creds.token!=user.google_access_token:

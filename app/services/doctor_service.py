@@ -70,7 +70,7 @@ def list_doctors(db:Session,specialisation:str=None)-> list[DoctorProfile]:
 
 def add_doctor_leave(db:Session,doctor_id:int,leave_date:date,
                       reason:str=None)-> dict:
-"""Cancel any booked appointments on the leave date and notify patients."""
+    """Cancel any booked appointments on the leave date and notify patients."""
     profile=db.query(DoctorProfile).filter(DoctorProfile.id==doctor_id).first()
     if not profile:
         raise ValueError("Doctor not found")

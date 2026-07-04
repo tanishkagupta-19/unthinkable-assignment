@@ -13,7 +13,7 @@ if settings.OPENAI_API_KEY:
 
 
 def generate_pre_visit_summary(symptoms_text:str)-> dict:
-"""Analyse symptoms and return urgency,chief complaint,suggested questions."""
+    """Analyse symptoms and return urgency,chief complaint,suggested questions."""
     if not client:
         logger.warning("OpenAI not configured,skipping pre-visit summary")
         return _fallback_pre_visit(symptoms_text)
@@ -68,7 +68,7 @@ def generate_pre_visit_summary(symptoms_text:str)-> dict:
 
 
 def generate_post_visit_summary(doctor_notes:str,prescription_text:str="")-> str:
-"""Convert clinical notes to a patient-friendly summary."""
+    """Convert clinical notes to a patient-friendly summary."""
     if not client:
         logger.warning("OpenAI not configured,skipping post-visit summary")
         return _fallback_post_visit(doctor_notes)

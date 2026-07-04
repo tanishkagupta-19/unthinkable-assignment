@@ -18,14 +18,14 @@ def verify_password(plain_password:str,hashed_password:str)-> bool:
     return pwd_context.verify(plain_password,hashed_password)
 
 
-def create_access_token(user_id:int,role:str)-> str:
-    expire=datetime.utcnow()+ timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    payload={
-"sub":user_id,
-"role":role,
-"exp":expire,
+def create_access_token(user_id: int, role: str) -> str:
+    expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    payload = {
+        "sub": str(user_id),   # <-- cast to string here
+        "role": role,
+        "exp": expire,
     }
-    return jwt.encode(payload,settings.SECRET_KEY,algorithm=settings.ALGORITHM)
+    return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
 def register_user(db:Session,email:str,password:str,full_name:str,
@@ -60,7 +60,7 @@ def authenticate_user(db:Session,email:str,password:str)-> User | None:
 
 
 def seed_admin(db:Session):
-"""Create default admin if it doesn't exist."""
+    """Create default admin if it doesn't exist."""
     existing=db.query(User).filter(User.email==settings.ADMIN_EMAIL).first()
     if existing:
         return

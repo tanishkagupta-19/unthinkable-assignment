@@ -50,7 +50,7 @@ def get_me(current_user:User=Depends(get_current_user)):
 
 @router.get("/google/connect")
 def google_connect(current_user:User=Depends(get_current_user)):
-"""Redirect to Google OAuth consent screen for calendar access."""
+    """Redirect to Google OAuth consent screen for calendar access."""
     if not settings.GOOGLE_CLIENT_ID:
         raise HTTPException(status_code=503,detail="Google OAuth not configured")
 
@@ -71,7 +71,7 @@ def google_connect(current_user:User=Depends(get_current_user)):
 
 @router.get("/google/callback")
 def google_callback(code:str,state:str,db:Session=Depends(get_db)):
-"""Exchange OAuth code for tokens and store them."""
+    """Exchange OAuth code for tokens and store them."""
     if not settings.GOOGLE_CLIENT_ID:
         raise HTTPException(status_code=503,detail="Google OAuth not configured")
 
