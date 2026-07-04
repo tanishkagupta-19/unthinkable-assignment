@@ -119,3 +119,46 @@ You need a Google Cloud project with Calendar API enabled and an OAuth 2.0 clien
 
 Users connect via `GET /api/auth/google/connect` — after that,calendar events are created automatically on booking.
 
+## Database Schema
+
+Core entities in our PostgreSQL database:
+
+* **Users**: Stores patient and doctor accounts, hashed passwords, and roles (`patient`, `doctor`, `admin`).
+* **DoctorProfiles**: Linked 1-to-1 with a User. Stores specialisation, working hours, and slot duration.
+* **Appointments**: Links a patient (User) and a DoctorProfile. Tracks `appointment_date`, `start_time`, `status` (`booked`, `completed`, `cancelled`), and text fields like `symptoms_text`, `doctor_notes`, and LLM summaries.
+* **DoctorLeaves**: Stores dates when a doctor is marked unavailable, triggering auto-cancellation of existing appointments for that day.
+* **SlotHolds**: Temporary rows for holding an appointment slot for 5 minutes during the booking flow. Auto-deleted when booked or expired.
+* **EmailLogs**: Tracks emails sent (or failed) via SendGrid for retry logic.
+
+## LLM Prompts Used
+
+The system leverages OpenAI (`gpt-3.5-turbo`) to automatically generate summaries for doctors and patients.
+
+**1. Pre-Visit Triage Brief (For Doctors)**
+This prompt analyzes the patient's self-reported symptoms when they book an appointment:
+```text
+You are a medical triage assistant. Analyse the following patient symptoms and return a JSON object with exactly these fields:
+- urgency_level: one of 'Low', 'Medium', or 'High'
+- chief_complaint: a one-line summary of the main issue
+- suggested_questions: a list of exactly 3 questions the doctor should ask
+
+Patient symptoms: {symptoms_text}
+
+Respond with ONLY the JSON object, no markdown formatting.
+```
+
+**2. Post-Visit Summary (For Patients)**
+This prompt translates the doctor's clinical notes and prescription into a friendly, plain-language summary for the patient:
+```text
+You are a helpful medical assistant. Convert the following clinical notes into a patient-friendly summary that a non-medical person can understand. Include:
+- What the doctor found (in simple language)
+- Medication schedule (if any prescription is provided)
+- Follow-up steps and when to come back
+- Any warning signs to watch for
+
+Clinical Notes: {doctor_notes}
+Prescription: {prescription_text} (if provided)
+
+Write in a warm, reassuring tone. Use simple language.
+```
+
